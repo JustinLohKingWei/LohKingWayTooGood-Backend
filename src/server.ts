@@ -1,24 +1,32 @@
 import express, { Express, Request, Response, NextFunction } from "express";
-import { WorkList } from "./WorkData";
-import 'dotenv/config';
-import { HobbyList } from "./HobbyData";
+import mongoose from "mongoose";
+import "dotenv/config";
+import hobbiesRouter from "./routes/hobbies";
+import worksRouter from "./routes/works";
 
 const app: Express = express();
-const port = process.env.PORT
+const port = process.env.PORT;
+const mongoURI: string = process.env.MONGO_URI ?? "NO URI DEFINED";
 
-app.use((req: Request, res: Response,next : NextFunction)=>{
-  console.log(req.path,req.method);
+// Connect to MongoDB or MongoDB Atlas
+mongoose
+  .connect(mongoURI)
+  .then(() => {
+    app.listen(port, () =>
+      console.log(`Express app listening on port ${port}!`)
+    );
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+
+// Middleware
+app.use(express.json());
+app.use((req: Request, res: Response, next: NextFunction) => {
+  console.log(req.path, req.method);
   next();
-})
+});
 
-//routes
-app.get("/", (req: Request, res: Response) =>
-  res.send("Hello World! I am typescript!")
-);
-app.get("/work", (req: Request, res: Response) => res.send(WorkList));
-app.get("/hobbies", (req: Request, res: Response) => res.send(HobbyList));
-
-
-app.listen(port , () => console.log(`Express app listening on port ${port}!`));
-
-
+// Routes
+app.use("/api/hobbies", hobbiesRouter);
+app.use("/api/works", worksRouter);
