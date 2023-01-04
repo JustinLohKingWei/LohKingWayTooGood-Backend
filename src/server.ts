@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import "dotenv/config";
 import hobbiesRouter from "./routes/hobbies";
 import worksRouter from "./routes/works";
+import skillsRouter from "./routes/skills";
 
 const app: Express = express();
 const port = process.env.PORT;
@@ -30,3 +31,4 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 // Routes
 app.use("/api/hobbies", hobbiesRouter);
 app.use("/api/works", worksRouter);
+app.use("/api/skills",skillsRouter)
