@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/server.ts",
   "scripts": {
-    "build": "rimraf dist && npx tsc",
+    "build": "rimraf dist && tsc",
     "prestart": "npm run build",
     "start": "node dist/server.js",
     "preserve": "npm run build",
